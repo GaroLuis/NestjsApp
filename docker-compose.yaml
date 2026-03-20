@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    hostname: 'nestjs-app'
+    volumes:
+      - '.:/var/www/nestjs-app'
+    ports:
+      - '3000:3000'
+      - '3001:3001'
+    depends_on:
+      - 'db'
+    networks:
+      - 'nestjs'
+
+  db:
+    image: 'postgres:18.3'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: 'password'
+    networks:
+      - 'nestjs'
+
+networks:
+  nestjs:
+    driver: 'bridge'
