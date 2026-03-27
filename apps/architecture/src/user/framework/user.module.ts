@@ -10,11 +10,11 @@ import { UserService } from '../application/user.service';
   providers: [
     {
       provide: UserRepositoryInterface,
-      useValue: UserMemoryRepository,
+      useClass: UserMemoryRepository,
     },
     {
       provide: UserServiceInterface,
-      useValue: UserService,
+      useClass: UserService,
     },
   ],
 })

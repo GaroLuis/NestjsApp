@@ -14,7 +14,7 @@ import { UpdateUserDto } from '../application/dto/update-user.dto';
 import { DeleteUserDto } from '../application/dto/delete-user.dto';
 import { User } from '../domain/user';
 
-@Controller()
+@Controller('users')
 export class UserController {
   constructor(
     @Inject(UserServiceInterface)
@@ -26,14 +26,16 @@ export class UserController {
     this.userService.create(request);
   }
 
-  @Put()
-  updateUser(@Body() request: UpdateUserDto): void {
+  @Put(':id')
+  updateUser(@Param('id') id: string, @Body() request: UpdateUserDto): void {
+    request.id = id;
+
     this.userService.update(request);
   }
 
-  @Delete()
-  deleteUser(@Param() request: DeleteUserDto): void {
-    this.userService.delete(request);
+  @Delete(':id')
+  deleteUser(@Param() params: DeleteUserDto): void {
+    this.userService.delete(params);
   }
 
   @Get()

@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../domain/user';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UserService implements UserServiceInterface {
@@ -20,6 +20,10 @@ export class UserService implements UserServiceInterface {
   }
 
   update(updateUserDto: UpdateUserDto): void {
+    if (!updateUserDto.id) {
+      throw new NotFoundException();
+    }
+
     const user = this.userRepository.findById(updateUserDto.id);
 
     if (null === user) {
