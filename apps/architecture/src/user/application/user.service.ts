@@ -13,18 +13,19 @@ export class UserService implements UserServiceInterface {
     private userRepository: UserRepositoryInterface,
   ) {}
 
-  create(createUserDto: CreateUserDto): void {
-    const user = User.create(createUserDto.email, createUserDto.password);
+  async create(createUserDto: CreateUserDto): Promise<void> {
+    const user = User.create(createUserDto.email);
+    user.setPassword(createUserDto.password);
 
-    this.userRepository.insert(user);
+    await this.userRepository.insert(user);
   }
 
-  update(updateUserDto: UpdateUserDto): void {
+  async update(updateUserDto: UpdateUserDto): Promise<void> {
     if (!updateUserDto.id) {
       throw new NotFoundException();
     }
 
-    const user = this.userRepository.findById(updateUserDto.id);
+    const user = await this.userRepository.findById(updateUserDto.id);
 
     if (null === user) {
       return;
@@ -38,14 +39,14 @@ export class UserService implements UserServiceInterface {
       user.setPassword(updateUserDto.password);
     }
 
-    this.userRepository.update(user);
+    await this.userRepository.update(user);
   }
 
-  delete(deleteUserDto: DeleteUserDto): void {
-    this.userRepository.delete(deleteUserDto.id);
+  async delete(deleteUserDto: DeleteUserDto): Promise<void> {
+    await this.userRepository.delete(deleteUserDto.id);
   }
 
-  getAll(): User[] {
-    return this.userRepository.findAll();
+  async getAll(): Promise<User[]> {
+    return await this.userRepository.findAll();
   }
 }

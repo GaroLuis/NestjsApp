@@ -22,24 +22,27 @@ export class UserController {
   ) {}
 
   @Post()
-  createUser(@Body() request: CreateUserDto): void {
-    this.userService.create(request);
+  async createUser(@Body() request: CreateUserDto): Promise<void> {
+    await this.userService.create(request);
   }
 
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() request: UpdateUserDto): void {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() request: UpdateUserDto,
+  ): Promise<void> {
     request.id = id;
 
-    this.userService.update(request);
+    await this.userService.update(request);
   }
 
   @Delete(':id')
-  deleteUser(@Param() params: DeleteUserDto): void {
-    this.userService.delete(params);
+  async deleteUser(@Param() params: DeleteUserDto): Promise<void> {
+    await this.userService.delete(params);
   }
 
   @Get()
-  getUsers(): User[] {
-    return this.userService.getAll();
+  async getUsers(): Promise<User[]> {
+    return await this.userService.getAll();
   }
 }

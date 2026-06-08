@@ -4,23 +4,23 @@ import { UserService } from './user.service';
 
 describe('UserService', () => {
   class DefaultRepository implements UserRepositoryInterface {
-    insert(): User[] {
+    insert(): Promise<void> {
       throw new Error('Method not implemented.');
     }
 
-    delete(): void {
+    delete(): Promise<void> {
       throw new Error('Method not implemented.');
     }
 
-    update(): void {
+    update(): Promise<void> {
       throw new Error('Method not implemented.');
     }
 
-    findAll(): User[] {
+    findAll(): Promise<User[]> {
       throw new Error('Method not implemented.');
     }
 
-    findById(): User {
+    findById(): Promise<User> {
       throw new Error('Method not implemented.');
     }
   }
@@ -30,18 +30,20 @@ describe('UserService', () => {
   };
 
   describe('getAll', () => {
-    it('should return result from repository', () => {
-      const users: User[] = [User.create('email@test.com', '123456')];
+    it('should return result from repository', async () => {
+      const user = User.create('email@test.com');
+      user.setPassword('12345');
+      const users: User[] = [user];
 
       const service = getService(
         new (class extends DefaultRepository {
-          findAll(): User[] {
-            return users;
+          findAll(): Promise<User[]> {
+            return new Promise((resolve) => setTimeout(() => resolve(users)));
           }
         })(),
       );
 
-      expect(service.getAll()).toBe(users);
+      expect(await service.getAll()).toBe(users);
     });
   });
 });

@@ -1,16 +1,23 @@
 export class User {
-  constructor(
-    private id: string | null,
-    private email: string,
-    private password: string,
-  ) {}
+  private _id: string | null;
+  private email: string;
+  private password?: string;
 
-  public static create(email: string, password: string): User {
-    return new User(null, email, password);
+  constructor(email: string) {
+    this._id = null;
+    this.email = email;
+  }
+
+  public static create(email: string): User {
+    return new User(email);
+  }
+
+  setId(value: string | null) {
+    this._id = value;
   }
 
   getId(): string | null {
-    return this.id;
+    return this._id;
   }
 
   getEmail(): string {
@@ -21,7 +28,7 @@ export class User {
     this.email = email;
   }
 
-  getPassword(): string {
+  getPassword(): string | undefined {
     return this.password;
   }
 

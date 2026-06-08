@@ -2,3 +2,5 @@
 
 apps/architecture/node_modules
 apps/architecture/dist
+apps/architecture/.snapshot-nestjs-architecture.json
+apps/architecture/migrations/.snapshot-nestjs-architecture.json
