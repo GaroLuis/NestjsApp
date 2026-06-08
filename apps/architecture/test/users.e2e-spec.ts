@@ -1,13 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
+import { EntityManager } from '@mikro-orm/postgresql';
+import { UserEntity } from '../src/user/data/user.entity';
 import { CreateUserDto } from '../src/user/application/dto/create-user.dto';
-import { UpdateUserDto } from '../src/user/application/dto/update-user.dto';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
+  let em: EntityManager;
+  let createdUserId: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -15,11 +18,22 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     await app.init();
+
+    em = app.get(EntityManager);
+
+    const ctx = em.fork();
+    const entity = ctx.create(UserEntity, {
+      email: 'fixture@test.com',
+      password: 'fixturepass123',
+    });
+    await ctx.persist(entity).flush();
+    createdUserId = entity.id;
   });
 
   it('/users (GET)', () => {
-    request(app.getHttpServer()).get('/users').expect(200);
+    return request(app.getHttpServer()).get('/users').expect(200);
   });
 
   it('/users (POST)', () => {
@@ -32,19 +46,16 @@ describe('AppController (e2e)', () => {
   });
 
   it('/users/{id} (PUT)', () => {
-    const body: UpdateUserDto = {
-      email: 'testing@email.com',
-      password: 'testing',
-    };
-
     return request(app.getHttpServer())
-      .put('/users/1234')
-      .send(body)
+      .put(`/users/${createdUserId}`)
+      .send({ email: 'updated@test.com', password: 'updatedpass123' })
       .expect(200);
   });
 
   it('/users/{id} (DELETE)', () => {
-    return request(app.getHttpServer()).delete('/users/1234').expect(200);
+    return request(app.getHttpServer())
+      .delete(`/users/${createdUserId}`)
+      .expect(200);
   });
 
   afterAll(async () => {

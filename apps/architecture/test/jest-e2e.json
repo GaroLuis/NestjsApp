@@ -4,6 +4,18 @@
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
+    "^.+\\.(t|j)s$": ["ts-jest", {
+      "useESM": true,
+      "tsconfig": "./test/tsconfig.e2e.json"
+    }]
+  },
+  "extensionsToTreatAsEsm": [".ts"],
+  "transformIgnorePatterns": ["/node_modules/(?!(@mikro-orm|kysely))"],
+  "moduleNameMapper": {
+    "^@mikro-orm/postgresql$": "<rootDir>/../node_modules/@mikro-orm/postgresql",
+    "^@mikro-orm/core$": "<rootDir>/../node_modules/@mikro-orm/core",
+    "^@mikro-orm/nestjs$": "<rootDir>/../node_modules/@mikro-orm/nestjs",
+    "^@mikro-orm/sql$": "<rootDir>/../node_modules/@mikro-orm/sql",
+    "^kysely$": "<rootDir>/../node_modules/kysely"
   }
 }

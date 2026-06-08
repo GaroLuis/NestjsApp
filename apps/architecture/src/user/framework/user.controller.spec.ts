@@ -5,19 +5,19 @@ import { User } from '../domain/user';
 
 describe('UserController', () => {
   class DefaultService implements UserServiceInterface {
-    getAll(): User[] {
+    getAll(): Promise<User[]> {
       throw new Error('Method not implemented.');
     }
 
-    create(): void {
+    create(): Promise<void> {
       throw new Error('Method not implemented.');
     }
 
-    update(): void {
+    update(): Promise<void> {
       throw new Error('Method not implemented.');
     }
 
-    delete(): void {
+    delete(): Promise<void> {
       throw new Error('Method not implemented.');
     }
   }
@@ -38,17 +38,19 @@ describe('UserController', () => {
 
   describe('getUsers', () => {
     it('should return result from service', async () => {
-      const users: User[] = [User.create('email@test.com', '123456')];
+      const user = User.create('email@test.com');
+      user.setPassword('12345');
+      const users: User[] = [user];
 
       const controller = await getController(
         new (class extends DefaultService {
-          getAll(): User[] {
-            return users;
+          getAll(): Promise<User[]> {
+            return new Promise((resolve) => setTimeout(() => resolve(users)));
           }
         })(),
       );
 
-      expect(controller.getUsers()).toBe(users);
+      expect(await controller.getUsers()).toBe(users);
     });
   });
 });

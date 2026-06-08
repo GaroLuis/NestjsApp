@@ -4,10 +4,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '../domain/user';
 
 export interface UserServiceInterface {
-  create(createUserDto: CreateUserDto): void;
-  update(updateUserDto: UpdateUserDto): void;
-  delete(deleteUserDto: DeleteUserDto): void;
-  getAll(): User[];
+  create(createUserDto: CreateUserDto): Promise<void>;
+  update(updateUserDto: UpdateUserDto): Promise<void>;
+  delete(deleteUserDto: DeleteUserDto): Promise<void>;
+  getAll(): Promise<User[]>;
 }
 
 export const UserServiceInterface = Symbol('UserServiceInterface');

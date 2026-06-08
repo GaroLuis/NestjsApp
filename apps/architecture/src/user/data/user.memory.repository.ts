@@ -6,29 +6,47 @@ import { Injectable } from '@nestjs/common';
 export class UserMemoryRepository implements UserRepositoryInterface {
   private users: User[] = [];
 
-  insert(user: User): void {
-    this.users.push(user);
+  async insert(user: User): Promise<void> {
+    await new Promise((resolve) =>
+      setTimeout(() => resolve(this.users.push(user))),
+    );
   }
 
-  delete(id: string): void {
-    this.users = this.users.filter((u) => id !== u.getId());
+  async delete(id: string): Promise<void> {
+    await new Promise((resolve) =>
+      setTimeout(() =>
+        resolve((this.users = this.users.filter((u) => id !== u.getId()))),
+      ),
+    );
   }
 
-  update(user: User): void {
-    this.users.map((u) => {
-      if (u.getId() === user.getId()) {
-        return user;
-      }
+  async update(user: User): Promise<void> {
+    await new Promise((resolve) =>
+      setTimeout(() =>
+        resolve(
+          this.users.map((u) => {
+            if (u.getId() === user.getId()) {
+              return user;
+            }
 
-      return u;
-    });
+            return u;
+          }),
+        ),
+      ),
+    );
   }
 
-  findAll(): User[] {
-    return this.users;
+  async findAll(): Promise<User[]> {
+    return await new Promise((resolve) =>
+      setTimeout(() => resolve(this.users)),
+    );
   }
 
-  findById(id: string): User | null {
-    return this.users.find((u) => id === u.getId()) ?? null;
+  async findById(id: string): Promise<User | null> {
+    return await new Promise((resolve) =>
+      setTimeout(() =>
+        resolve(this.users.find((u) => id === u.getId()) ?? null),
+      ),
+    );
   }
 }
