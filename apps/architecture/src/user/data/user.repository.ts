@@ -75,4 +75,17 @@ export class UserRepository implements UserRepositoryInterface {
 
     return User.create(user.email);
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this.em.findOne(UserEntity, { email });
+
+    if (null === user) {
+      return null;
+    }
+
+    const domain = User.create(user.email);
+    domain.setPassword(user.password);
+
+    return domain;
+  }
 }

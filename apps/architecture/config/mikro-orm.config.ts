@@ -10,6 +10,6 @@ export default defineConfig({
   entitiesTs: ['./src/**/*.entity.ts'],
   debug: true,
   migrations: {
-    pathTs: './apps/architecture/migrations',
+    pathTs: './migrations',
   },
 });
