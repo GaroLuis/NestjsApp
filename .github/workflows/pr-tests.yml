@@ -1,0 +1,81 @@
+name: PR Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/architecture
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/architecture/package-lock.json
+
+      - run: npm ci
+
+      - run: npm test
+
+  e2e:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/architecture
+
+    services:
+      postgres:
+        image: postgres:18.3
+        env:
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/architecture/package-lock.json
+
+      - run: npm ci
+
+      - run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - run: createdb -h localhost -U postgres nestjs-architecture-test
+        env:
+          PGPASSWORD: password
+
+      - run: npm run build
+
+      - run: npx mikro-orm schema:create -r
+        env:
+          DB_HOST: localhost
+          DB_NAME: nestjs-architecture-test
+          DB_USER: postgres
+          DB_PASSWORD: password
+          DB_DEBUG: false
+
+      - run: npm run test:e2e
+        env:
+          NODE_ENV: test
+          DB_HOST: localhost
+          DB_NAME: nestjs-architecture-test
+          DB_USER: postgres
+          DB_PASSWORD: password
