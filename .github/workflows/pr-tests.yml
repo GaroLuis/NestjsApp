@@ -79,3 +79,4 @@ jobs:
           DB_NAME: nestjs-architecture-test
           DB_USER: postgres
           DB_PASSWORD: password
+          JWT_SECRET: jwt-secret-key-change-in-production

@@ -12,7 +12,7 @@ import { UserModule } from '../../user/framework/user.module';
     UserModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: 'jwt-secret-key-change-in-production',
+      secret: process.env.JWT_SECRET!,
       signOptions: { expiresIn: '1d' },
     }),
   ],
