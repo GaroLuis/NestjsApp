@@ -49,4 +49,12 @@ export class UserMemoryRepository implements UserRepositoryInterface {
       ),
     );
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return await new Promise((resolve) =>
+      setTimeout(() =>
+        resolve(this.users.find((u) => u.getEmail() === email) ?? null),
+      ),
+    );
+  }
 }

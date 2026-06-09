@@ -5,7 +5,7 @@ export class User {
 
   constructor(email: string) {
     this._id = null;
-    this.email = email;
+    this.email = email.toLowerCase();
   }
 
   public static create(email: string): User {
@@ -25,7 +25,7 @@ export class User {
   }
 
   setEmail(email: string): void {
-    this.email = email;
+    this.email = email.toLowerCase();
   }
 
   getPassword(): string | undefined {

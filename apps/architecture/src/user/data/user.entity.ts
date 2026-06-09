@@ -11,7 +11,7 @@ export const UserSchema = defineEntity({
       .uuid()
       .primary()
       .onCreate(() => v4()),
-    email: p.string(),
+    email: p.string().unique(),
     password: p.string(),
   },
 });

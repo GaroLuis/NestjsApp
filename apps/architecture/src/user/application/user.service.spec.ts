@@ -23,6 +23,10 @@ describe('UserService', () => {
     findById(): Promise<User> {
       throw new Error('Method not implemented.');
     }
+
+    findByEmail(): Promise<User | null> {
+      throw new Error('Method not implemented.');
+    }
   }
 
   const getService = (repository: UserRepositoryInterface) => {
