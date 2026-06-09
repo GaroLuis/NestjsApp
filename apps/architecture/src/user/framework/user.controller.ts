@@ -14,7 +14,7 @@ import { CreateUserDto } from '../application/dto/create-user.dto';
 import { UpdateUserDto } from '../application/dto/update-user.dto';
 import { DeleteUserDto } from '../application/dto/delete-user.dto';
 import { User } from '../domain/user';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../auth/framework/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {

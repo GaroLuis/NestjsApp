@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/framework/user.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/framework/auth.module';
 import config from '../config/mikro-orm.config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 

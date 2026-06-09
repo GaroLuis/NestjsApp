@@ -6,8 +6,8 @@ import {
   Inject,
   Post,
 } from '@nestjs/common';
-import { AuthServiceInterface } from './auth.service.interface';
-import { LoginDto } from './dto/login.dto';
+import { AuthServiceInterface } from '../application/auth.service.interface';
+import { LoginDto } from '../application/dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
