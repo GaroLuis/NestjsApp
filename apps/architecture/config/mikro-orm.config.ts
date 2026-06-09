@@ -1,14 +1,14 @@
 import { defineConfig } from '@mikro-orm/postgresql';
 
 export default defineConfig({
-  dbName: 'nestjs-architecture',
-  host: 'db',
-  port: 5432,
-  user: 'postgres',
-  password: 'password',
+  dbName: process.env.DB_NAME ?? 'nestjs-architecture',
+  host: process.env.DB_HOST ?? 'db',
+  port: Number(process.env.DB_PORT) || 5432,
+  user: process.env.DB_USER ?? 'postgres',
+  password: process.env.DB_PASSWORD ?? 'password',
   entities: ['./dist/**/*.entity.js'],
   entitiesTs: ['./src/**/*.entity.ts'],
-  debug: true,
+  debug: process.env.DB_DEBUG === 'true',
   migrations: {
     pathTs: './migrations',
   },
